@@ -4,7 +4,7 @@ import yaml
 import webbrowser as wb
 from datetime import date
 
-with open('config.yml', 'r') as f:
+with open('secrets.yml', 'r') as f:
     cfg = yaml.safe_load(f)
 
 absent = absence(cfg['key'], cfg['secret'])
