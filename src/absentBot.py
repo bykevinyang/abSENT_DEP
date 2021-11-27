@@ -1,7 +1,8 @@
 import smtplib
 import yaml
 from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from email.message import EmailMessage
+from absentTeacher import AbsentTeacher
 
 class abSENTBot():
     def __init__(self, credentials="secrets.yml"):
@@ -12,42 +13,31 @@ class abSENTBot():
             self.email = cfg['email']
         self.server.login(self.email, cfg['password'])
 
-    def send_text(self, recipient: str, message: str):
+    def send_text(self, recipient: str, message: str, subject: str):
         self.server.ehlo()  # Can be omitted
-        msg = MIMEMultipart()
+        msg = MIMEText("\r\n\r\n" + message)
+        msg['Subject'] = subject
         msg['From'] = self.email
         msg['To'] = recipient
-        msg['Subject'] = 'Received'
-
-        msg.attach(MIMEText(message, 'plain'))
         
         text = msg.as_string()
         self.server.sendmail(self.email, recipient, text)
-    
+
+    def notify_absence(self, recipient: str, absent_teacher: AbsentTeacher):
+        subject = f"Absent Teacher!"
+        message = f"{absent_teacher.first} {absent_teacher.last} is absent {absent_teacher.length}!"
+        message += f"\n{absent_teacher.date}"
+        message += f"\nNote:\n{absent_teacher.note}"
+
+        self.send_text(recipient, message, subject)
+
     def welcome(self, recipient: str):
-        msg = MIMEMultipart()
-        msg['From'] = self.email
-        msg['To'] = recipient
-        msg['Subject'] = 'Welcome to abSENT Bot'
-        
+        self.server.ehlo()  # Can be omitted
         message = "abSENT is an SMS bot that will automatically text you if your teacher is absent"
-        
-        msg.attach(MIMEText(message, 'plain'))
-        
-        text = msg.as_string()
-        self.server.sendmail(self.email, recipient, text)
-
-        msg = MIMEMultipart()
-        msg['From'] = self.email
-        msg['To'] = recipient
-        msg['Subject'] = 'Welcome to abSENT Bot'
-        message = "\nTo use abSENT, simply text Block LastName FirstName"
-        message += "\nExample: \nA Doe John"
-
-        msg.attach(MIMEText(message, 'plain'))
-        
-        text = msg.as_string()
-        self.server.sendmail(self.email, recipient, text)
+        message += "\nTo use abSENT, send the following text to the bot:"
+        message += "\nabSENT <Block> <FirstName> <LastName>"
+        message += "\nHere is an example:\n\tA John Doe"
+        self.send_text(recipient, message, "Welcome to abSENT!")
 
     def end_server(self):
         return self.server.quit()

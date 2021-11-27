@@ -1,3 +1,4 @@
+from absentTeacher import AbsentTeacher
 from gmailText import gmailText
 from absentBot import abSENTBot
 import time
@@ -6,14 +7,9 @@ gmailTextTest = gmailText()
 texterTest = abSENTBot()
 
 print("abSENT Bot Started")
+# texterTest.send_text("6176868207@vzwpix.com", "Testing if Absent Bot Works", "Hello There!")
 texterTest.welcome("6176868207@vtext.com")
 
-while True:
-    time.sleep(2)
-    msgs = gmailTextTest.get_unread_texts()
-    if msgs:
-        for msg in msgs:
-            print(msg)
-            texterTest.send_text(msg.email, "Recieved: " + msg.message)
-            print("Sent auto response")
-            # print(f"Sent: Received: {msg.message}")
+exampleTeach = AbsentTeacher("Kevin", "Yang", "3 Blocks", "A BLock", "Have fun!")
+# texterTest.notify_absence("6176868207@vzwpix.com", exampleTeach)
+# print(f"Sent absence message {exampleTeach}")

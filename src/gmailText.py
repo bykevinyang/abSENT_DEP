@@ -139,3 +139,20 @@ class gmailText():
 
             return emailFrom, emailTo, emailSubject, date, textMsg, message['id']
         return None
+    
+    def read_from(self, email, unread=True):
+        texts = [ ]
+        query = f"from:{email}"
+        if unread:
+            query += "is:unread"
+ 
+        print(query)
+        results = self.search_messages(query)
+        if results:
+            for result in results:
+                email = self.read_email(result)
+                if email:
+                    txt = textMessage(email[0], email[3], email[4])
+                    texts.append(txt)
+        return texts
+        
