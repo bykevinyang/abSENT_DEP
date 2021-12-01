@@ -8,7 +8,8 @@ texterTest = abSENTBot()
 
 print("abSENT Bot Started")
 # texterTest.send_text("6176868207@vzwpix.com", "Testing if Absent Bot Works", "Hello There!")
-texterTest.welcome("6176868207@vtext.com")
+texterTest.welcome("6178938976@txt.att.net")
+# texterTest.setup_account("6176868207@vtext.com")
 
 exampleTeach = AbsentTeacher("Kevin", "Yang", "3 Blocks", "A BLock", "Have fun!")
 # texterTest.notify_absence("6176868207@vzwpix.com", exampleTeach)
